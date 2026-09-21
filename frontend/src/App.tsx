@@ -1,0 +1,19 @@
+import { Route, Routes } from 'react-router-dom'
+import Layout from './components/Layout.tsx'
+import Home from './pages/Home.tsx'
+import Privacy from './pages/Privacy.tsx'
+import Terms from './pages/Terms.tsx'
+import NotFound from './pages/NotFound.tsx'
+
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="terms" element={<Terms />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  )
+}
