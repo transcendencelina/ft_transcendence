@@ -1,0 +1,351 @@
+Если ты имеешь в виду проект **ft\_transcendence** из 42, то документация обычно должна объяснять **что вы сделали, как это устроено, как запустить проект и какие требования/ограничения у него есть**.
+
+ Хорошая структура `README.md` может быть такой:
+
+ ## 1\. Описание проекта
+
+ Коротко: что это за проект и что он умеет.
+
+ Например:
+
+ - Web-приложение для игры в Pong.
+- Регистрация и авторизация пользователей.
+- Онлайн-матчи.
+- Система друзей.
+- Чат.
+- Турниры.
+- Профиль пользователя и статистика.
+
+ ## 2\. Команда
+
+ Кто над чем работал:
+
+ | Участник | Ответственность |
+| --- | --- |
+| Alice | Backend, authentication |
+| Bob | Frontend, UI |
+| Charlie | Game logic, WebSocket |
+| Dave | DevOps, Docker |
+
+Для 42 это особенно полезно, потому что преподавателю сразу понятно распределение работы.
+
+ ## 3\. Технологии
+
+ Перечислить используемый стек и зачем он нужен.
+
+ Например:
+
+```
+Frontend:
+- TypeScript
+- React
+- Tailwind CSS
+
+Backend:
+- Node.js
+- NestJS
+- WebSocket
+
+Database:
+- PostgreSQL
+
+Infrastructure:
+- Docker
+- Nginx
+```
+
+ Не просто список — желательно коротко объяснить роль каждой технологии.
+
+ ## 4\. Архитектура
+
+ Это одна из самых важных частей.
+
+ Показать, как компоненты взаимодействуют:
+
+```
+                ┌──────────────┐
+                │    Browser   │
+                └──────┬───────┘
+                       │ HTTPS
+                       ▼
+                ┌──────────────┐
+                │    Nginx     │
+                └──────┬───────┘
+                       │
+          ┌────────────┴────────────┐
+          ▼                         ▼
+   ┌─────────────┐           ┌─────────────┐
+   │  Frontend   │           │   Backend   │
+   └─────────────┘           └──────┬──────┘
+                                    │
+                              ┌─────┴─────┐
+                              ▼           ▼
+                        ┌──────────┐  ┌──────────┐
+                        │PostgreSQL│  │ WebSocket│
+                        └──────────┘  └──────────┘
+```
+
+ И отдельно объяснить, почему архитектура устроена именно так.
+
+ ## 5\. Установка и запуск
+
+ Это должно быть максимально конкретно.
+
+ Например:
+
+```
+git clone <repository>
+cd ft_transcendence
+
+cp .env.example .env
+
+docker compose up --build
+```
+
+ И написать, где после запуска находится приложение:
+
+```
+http://localhost:8080
+```
+
+ Также описать необходимые версии Node.js/Docker и переменные окружения.
+
+ ## 6\. Environment variables
+
+ Объяснить `.env`:
+
+```
+DATABASE_URL=...
+JWT_SECRET=...
+CLIENT_URL=...
+```
+
+ При этом **не класть реальные секреты в репозиторий**.
+
+ Можно показать `.env.example`:
+
+```
+DATABASE_URL=
+JWT_SECRET=
+CLIENT_URL=http://localhost:3000
+```
+
+ ## 7\. Функциональность
+
+ Отдельный раздел, где объясняется, что пользователь может делать.
+
+ Например:
+
+ ### Authentication
+
+ - Registration
+- Login
+- Logout
+- Password hashing
+- Session/JWT management
+
+ ### Game
+
+ - Создание матча
+- Подключение второго игрока
+- Обработка игровых событий через WebSocket
+- Подсчёт очков
+- Завершение матча
+
+ ### Chat
+
+ - Public chat
+- Private messages
+- Blocking users
+- Message history
+
+ ## 8\. API
+
+ Если есть REST API — описать endpoints.
+
+ Например:
+
+ | Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/api/auth/login` | Авторизация |
+| `POST` | `/api/auth/register` | Регистрация |
+| `GET` | `/api/users/me` | Текущий пользователь |
+| `GET` | `/api/users/:id` | Профиль пользователя |
+| `POST` | `/api/matches` | Создать матч |
+
+Для каждого важного endpoint желательно указать:
+
+ - Request
+- Response
+- Authentication requirements
+- Возможные ошибки
+
+ ## 9\. WebSocket protocol
+
+ Для `ft_transcendence` это особенно актуально.
+
+ Например:
+
+```
+Client                         Server
+  │                              │
+  │──── join_game ──────────────►│
+  │                              │
+  │◄──── game_started ───────────│
+  │                              │
+  │──── paddle_move ────────────►│
+  │                              │
+  │◄──── game_state ─────────────│
+  │                              │
+  │◄──── game_finished ──────────│
+```
+
+ И описать формат сообщений:
+
+```
+{
+  "type": "paddle_move",
+  "direction": "up"
+}
+```
+
+ ## 10\. Database
+
+ Показать основные таблицы и связи.
+
+ Например:
+
+```
+User
+ ├── id
+ ├── username
+ ├── email
+ └── avatar
+
+Match
+ ├── id
+ ├── player1_id → User
+ ├── player2_id → User
+ ├── score1
+ ├── score2
+ └── created_at
+```
+
+ Если схема достаточно большая — лучше добавить ER-диаграмму.
+
+ ## 11\. Безопасность
+
+ Для такого проекта это важный раздел.
+
+ Описать, например:
+
+ - Password hashing
+- Input validation
+- Authentication
+- Authorization
+- SQL injection protection
+- XSS protection
+- CSRF protection, если применимо
+- Rate limiting
+- WebSocket authentication
+- CORS
+- Secrets management
+
+ И главное — **не просто написать "есть защита"**, а объяснить, как именно она реализована.
+
+ ## 12. Тестирование
+
+ Написать:
+
+ - какие тесты существуют;
+- как их запустить;
+- что именно тестируется.
+
+ Например:
+
+```
+npm test
+```
+
+ И:
+
+```
+Unit tests:
+- authentication
+- game logic
+- score calculation
+
+Integration tests:
+- API
+- database
+- WebSocket communication
+```
+
+ ## 13\. Известные ограничения
+
+ Очень хороший раздел, особенно для учебного проекта.
+
+ Например:
+
+```
+Known limitations:
+- Maximum 2 players per game.
+- Tournament brackets are limited to 8 players.
+- Chat messages are limited to 500 characters.
+```
+
+ Если что-то не реализовано — лучше честно это указать.
+
+ ## 14\. Решения и trade-offs
+
+ Это часто недооценивают.
+
+ Не только:
+
+ > Мы использовали WebSocket.
+
+ А:
+
+ > Для realtime-состояния игры мы выбрали WebSocket вместо обычного HTTP polling, потому что сервер должен передавать состояние игры клиентам с минимальной задержкой.
+
+ То есть объяснять **почему было принято решение**, а не только **что было сделано**.
+
+---
+
+ ### Если это именно документация для сдачи 42
+
+ Я бы ориентировался примерно на такую структуру:
+
+```
+README.md
+│
+├── Project Overview
+├── Team
+├── Features
+├── Tech Stack
+├── Architecture
+├── Installation
+├── Environment Variables
+├── Usage
+├── API Documentation
+├── WebSocket Protocol
+├── Database Schema
+├── Security
+├── Testing
+├── Known Limitations
+└── Technical Decisions
+```
+
+ А если у вас есть отдельный `docs/`, то можно сделать:
+
+```
+docs/
+├── architecture.md
+├── api.md
+├── websocket.md
+├── database.md
+├── security.md
+└── development.md
+```
+
+ **Главный принцип:** документация должна позволить человеку, который вообще не видел ваш код, понять **что вы сделали → как это устроено → почему вы это сделали → как это запустить → как этим пользоваться**.
